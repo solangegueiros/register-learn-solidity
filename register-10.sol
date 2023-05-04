@@ -1,15 +1,16 @@
-pragma solidity 0.5.4;
-// WhiteList
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.19;
+// Array = One array for all
 
 contract Register10 {
-    string private info;
-    address payable public owner;
+    string[] private info;
+    address public owner;
     mapping (address => bool) public whiteList;
 
-    constructor() public {
+    constructor() {
         owner = msg.sender;
         whiteList[msg.sender] = true;
-        info = "Sol";
+        info.push ("Sol");
     }
 
     event InfoChange(string oldInfo, string newInfo);
@@ -24,23 +25,24 @@ contract Register10 {
         _;
     }
 
-    function getInfo() public view returns (string memory) {
+    function getInfo(uint index) public view returns (string memory) {
+        return info[index];
+    }
+
+    function setInfo(uint index, string memory _info) public onlyWhitelist {
+        emit InfoChange (info[index], _info);
+        info[index] = _info;
+    }
+    
+    function addInfo(string memory _info) public onlyWhitelist returns (uint index) {
+        info.push(_info);
+        index = info.length -1;
+    }
+
+    function listInfo() public view returns (string[] memory) {
         return info;
     }
-
-    function setInfo(string memory _info) public onlyWhitelist {
-        emit InfoChange (info, _info);
-        info = _info;
-    }
-
-    function kill() public onlyOwner {
-        selfdestruct(owner);
-    }
-
-    function isAlive() public pure returns (bool) {
-        return true;
-    }
-
+    
     function addMember (address _member) public onlyOwner {
         whiteList[_member] = true;
     }

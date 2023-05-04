@@ -1,10 +1,13 @@
-pragma solidity 0.5.4;
-// Selfdestruct
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.19;
+// Owner
 
 contract Register03 {
     string private info;
+    address public owner;
 
-    constructor() public {
+    constructor() {
+        owner = msg.sender;
         info = "Sol";
     }
     
@@ -15,8 +18,5 @@ contract Register03 {
     function setInfo(string memory _info) public {
         info = _info;
     }
-
-    function kill() public {
-        selfdestruct(msg.sender);
-    }
+    
 }

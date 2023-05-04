@@ -1,10 +1,11 @@
-pragma solidity 0.5.4;
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.19;
 // Constructor
 
 contract Register02 {
     string private info;
 
-    constructor() public {
+    constructor() {
         info = "Sol";
     }
     

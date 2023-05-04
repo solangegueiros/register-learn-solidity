@@ -1,18 +1,28 @@
-pragma solidity 0.5.4;
-// Array = One array for all
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.19;
+// Struct = Array of Structs for all addresses
 
 contract Register12 {
-    string[] private info;
-    address payable public owner;
+    address public owner;
     mapping (address => bool) public whiteList;
+    
+    struct InfoStruct {
+        address account;
+        string info;
+    }
+    InfoStruct[] infos;
 
-    constructor() public {
+    constructor() {
         owner = msg.sender;
         whiteList[msg.sender] = true;
-        info.push ("Sol");
+        InfoStruct memory infoAux = InfoStruct ({
+            account: msg.sender,
+            info: "Sol"
+        });        
+        infos.push (infoAux);
     }
 
-    event InfoChange(string oldInfo, string newInfo);
+    event InfoChange(address person, string oldInfo, string newInfo);
     
     modifier onlyOwner {
         require(msg.sender == owner,"Only owner");
@@ -24,25 +34,27 @@ contract Register12 {
         _;
     }
 
-    function getInfo(uint index) public view returns (string memory) {
-        return info[index];
+    function getInfo(uint index) public view returns (address, string memory) {
+        return (infos[index].account, infos[index].info);
     }
 
     function setInfo(uint index, string memory _info) public onlyWhitelist {
-        emit InfoChange (info[index], _info);
-        info[index] = _info;
+        require(msg.sender == infos[index].account, "Only your info");
+        emit InfoChange (msg.sender, infos[index].info, _info);
+        infos[index].info = _info;
     }
     
     function addInfo(string memory _info) public onlyWhitelist returns (uint index) {
-        index = info.push (_info) - 1;
-    }
-    
-    function kill() public onlyOwner {
-        selfdestruct(owner);
+        InfoStruct memory infoAux = InfoStruct ({
+            account: msg.sender,
+            info: _info
+        });
+        infos.push(infoAux);
+        index = infos.length - 1;
     }
 
-    function isAlive() public pure returns (bool) {
-        return true;
+    function listInfo() public view returns (InfoStruct[] memory) {
+        return infos;
     }
 
     function addMember (address _member) public onlyOwner {

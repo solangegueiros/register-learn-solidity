@@ -1,11 +1,13 @@
-pragma solidity 0.5.4;
-// IsAlive
-// How to know if your smart contract was selfdestructed?
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.19;
+// setInfo if is owner, nothing will happen if is not
 
 contract Register04 {
     string private info;
+    address public owner;
 
-    constructor() public {
+    constructor() {
+        owner = msg.sender;
         info = "Sol";
     }
     
@@ -14,14 +16,8 @@ contract Register04 {
     }
 
     function setInfo(string memory _info) public {
-        info = _info;
+        if (msg.sender == owner)
+            info = _info;
     }
-
-    function kill() public {
-        selfdestruct(msg.sender);
-    }
-
-    function isAlive() public pure returns (bool) {
-        return true;
-    }     
+    
 }

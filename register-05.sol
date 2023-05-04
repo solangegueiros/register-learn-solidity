@@ -1,11 +1,12 @@
-pragma solidity 0.5.4;
-// Owner
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.19;
+// require owner
 
 contract Register05 {
     string private info;
-    address payable public owner;
+    address public owner;
 
-    constructor() public {
+    constructor() {
         owner = msg.sender;
         info = "Sol";
     }
@@ -15,14 +16,8 @@ contract Register05 {
     }
 
     function setInfo(string memory _info) public {
+        require(msg.sender == owner, "Only owner");
         info = _info;
     }
-
-    function kill() public {
-        selfdestruct(owner);
-    }
-
-    function isAlive() public pure returns (bool) {
-        return true;
-    }    
+    
 }

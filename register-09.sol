@@ -1,36 +1,44 @@
-pragma solidity 0.5.4;
-// Event
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.19;
+// One info per address = mapping of string
 
 contract Register09 {
-    string private info;
-    address payable public owner;
+    address public owner;
+    mapping (address => bool) public whiteList;
+    mapping (address => string) public infos;
 
-    constructor() public {
+    constructor() {
         owner = msg.sender;
-        info = "Sol";
+        whiteList[msg.sender] = true;
+        infos[msg.sender] =  "Sol";
     }
 
-    event InfoChange(string oldInfo, string newInfo);
+    event InfoChange(address account, string oldInfo, string newInfo);
     
     modifier onlyOwner {
         require(msg.sender == owner,"Only owner");
         _;
     }
 
+    modifier onlyWhitelist {
+        require(whiteList[msg.sender] == true, "Only whitelist");
+        _;
+    }
+
     function getInfo() public view returns (string memory) {
-        return info;
+        return infos[msg.sender];
     }
 
-    function setInfo(string memory _info) public onlyOwner {
-        emit InfoChange (info, _info);
-        info = _info;
+    function setInfo(string memory _info) public onlyWhitelist {
+        emit InfoChange (msg.sender, infos[msg.sender], _info);
+        infos[msg.sender]= _info;
     }
 
-    function kill() public onlyOwner {
-        selfdestruct(owner);
+    function addMember (address _member) public onlyOwner {
+        whiteList[_member] = true;
     }
-
-    function isAlive() public pure returns (bool) {
-        return true;
+    
+    function delMember (address _member) public onlyOwner {
+        whiteList[_member] = false;
     }    
 }
