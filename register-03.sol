@@ -1,22 +1,24 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
-// Owner
+// Constructor
 
 contract Register03 {
     string private info;
-    address public owner;
+    uint public countChanges = 0;
 
     constructor() {
-        owner = msg.sender;
         info = "Sol";
+        // Will countChanges count the initial set? 
+        // To be discussed in class
+        // Here is not counting
     }
     
     function getInfo() public view returns (string memory) {
         return info;
     }
 
-    function setInfo(string memory _info) public {
+    function setInfo(string memory _info) external {
         info = _info;
-    }
-    
+        countChanges++;
+    }    
 }

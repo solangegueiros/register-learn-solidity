@@ -1,28 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
-// Enum - info color, one struct / info per address
+// One array per address = mapping and array
+// countChanges per address
 
 contract Register13 {
     address public owner;
     mapping (address => bool) public whiteList;
-    
-    //enum ColorInfo {Undefined = 0, Blue = 1, Blue = 2}
-    enum ColorInfo {Undefined, Blue, Red}
-    
-    struct InfoStruct {
-        ColorInfo color;
-        string info;
-    }
-    mapping (address => InfoStruct) public infos;
+    mapping (address => string[]) public infos;
+    mapping (address => uint) public countChanges;
 
     constructor() {
         owner = msg.sender;
         whiteList[msg.sender] = true;
-        InfoStruct memory infoAux = InfoStruct ({
-            color: ColorInfo.Undefined,
-            info: "Sol"
-        });        
-        infos[msg.sender] = infoAux;
+        infos[msg.sender].push("Sol");
     }
 
     event InfoChange(address person, string oldInfo, string newInfo);
@@ -37,16 +27,27 @@ contract Register13 {
         _;
     }
 
-    function getInfo() public view returns (ColorInfo, string memory) {
-        return (infos[msg.sender].color, infos[msg.sender].info);
+    function getInfo(uint index) public view returns (string memory) {
+        return infos[msg.sender][index];
     }
 
-    function setInfo(ColorInfo _color, string memory _info) public onlyWhitelist {
-        emit InfoChange (msg.sender, infos[msg.sender].info, _info);
-        infos[msg.sender].color = _color;
-        infos[msg.sender].info = _info;
+    function setInfo(uint index, string memory _info) public onlyWhitelist {
+        emit InfoChange (msg.sender, infos[msg.sender][index], _info);
+        infos[msg.sender][index] = _info;
+    }
+    
+    function addInfo(string memory _info) public onlyWhitelist returns (uint index) {
+        infos[msg.sender].push(_info);
+        index = infos[msg.sender].length -1;
     }
 
+    function listYourInfo() public view returns (string[] memory) {
+        return infos[msg.sender];
+    }
+
+    function listInfo(address account) public view returns (string[] memory) {
+        return infos[account];
+    }
 
     function addMember (address _member) public onlyOwner {
         whiteList[_member] = true;

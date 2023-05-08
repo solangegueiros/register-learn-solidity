@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
-// setInfo if is owner, nothing will happen if is not
+// Type address, owner
 
 contract Register04 {
     string private info;
+    uint public countChanges = 0;
     address public owner;
 
     constructor() {
@@ -15,9 +16,8 @@ contract Register04 {
         return info;
     }
 
-    function setInfo(string memory _info) public {
-        if (msg.sender == owner)
-            info = _info;
-    }
-    
+    function setInfo(string memory _info) external {
+        info = _info;
+        countChanges++;
+    }    
 }

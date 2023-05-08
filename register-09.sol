@@ -1,44 +1,41 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
-// One info per address = mapping of string
+// Array = List of infos
 
 contract Register09 {
+    string[] private info;
+    uint public countChanges = 0;
     address public owner;
-    mapping (address => bool) public whiteList;
-    mapping (address => string) public infos;
 
     constructor() {
         owner = msg.sender;
-        whiteList[msg.sender] = true;
-        infos[msg.sender] =  "Sol";
+        info.push ("Sol");
     }
 
-    event InfoChange(address account, string oldInfo, string newInfo);
+    event InfoChange(string oldInfo, string newInfo);
     
     modifier onlyOwner {
         require(msg.sender == owner,"Only owner");
         _;
     }
 
-    modifier onlyWhitelist {
-        require(whiteList[msg.sender] == true, "Only whitelist");
-        _;
+    function getInfo(uint index) public view returns (string memory) {
+        return info[index];
     }
 
-    function getInfo() public view returns (string memory) {
-        return infos[msg.sender];
-    }
-
-    function setInfo(string memory _info) public onlyWhitelist {
-        emit InfoChange (msg.sender, infos[msg.sender], _info);
-        infos[msg.sender]= _info;
-    }
-
-    function addMember (address _member) public onlyOwner {
-        whiteList[_member] = true;
+    function listAllInfo() public view returns (string[] memory) {
+        return info;
     }
     
-    function delMember (address _member) public onlyOwner {
-        whiteList[_member] = false;
-    }    
+    function addInfo(string memory _info) external onlyOwner returns (uint index) {
+        info.push(_info);
+        index = info.length -1;
+        countChanges++;
+    }
+
+    function setInfo(uint index, string memory _info) external onlyOwner {
+        emit InfoChange (info[index], _info);
+        info[index] = _info;
+        countChanges++;
+    }   
 }

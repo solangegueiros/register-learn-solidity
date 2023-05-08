@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
-// Event
+// Modifier onlyOwner
 
 contract Register07 {
     string private info;
+    uint public countChanges = 0;
     address public owner;
 
     constructor() {
@@ -11,8 +12,6 @@ contract Register07 {
         info = "Sol";
     }
 
-    event InfoChange(string oldInfo, string newInfo);
-    
     modifier onlyOwner {
         require(msg.sender == owner,"Only owner");
         _;
@@ -22,9 +21,8 @@ contract Register07 {
         return info;
     }
 
-    function setInfo(string memory _info) public onlyOwner {
-        emit InfoChange (info, _info);
+    function setInfo(string memory _info) external onlyOwner {
         info = _info;
-    }
- 
+        countChanges++;
+    }    
 }

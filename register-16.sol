@@ -1,25 +1,28 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
-// Struct = Array of Structs for all addresses
+// each address has a mapping with array of structs
 
 contract Register14 {
     address public owner;
     mapping (address => bool) public whiteList;
     
+    //enum ColorInfo {Undefined = 0, Blue = 1, Blue = 2}
+    enum ColorInfo {Undefined, Blue, Red}
+    
     struct InfoStruct {
-        address account;
+        ColorInfo color;
         string info;
     }
-    InfoStruct[] infos;
+    mapping (address => InfoStruct[]) public infos;
 
     constructor() {
         owner = msg.sender;
         whiteList[msg.sender] = true;
         InfoStruct memory infoAux = InfoStruct ({
-            account: msg.sender,
+            color: ColorInfo.Undefined,
             info: "Sol"
         });        
-        infos.push (infoAux);
+        infos[msg.sender].push (infoAux);
     }
 
     event InfoChange(address person, string oldInfo, string newInfo);
@@ -34,28 +37,24 @@ contract Register14 {
         _;
     }
 
-    function getInfo(uint index) public view returns (address, string memory) {
-        return (infos[index].account, infos[index].info);
+    function getInfo(uint index) public view returns (ColorInfo, string memory) {
+        return (infos[msg.sender][index].color, infos[msg.sender][index].info);
     }
 
-    function setInfo(uint index, string memory _info) public onlyWhitelist {
-        require(msg.sender == infos[index].account, "Only your info");
-        emit InfoChange (msg.sender, infos[index].info, _info);
-        infos[index].info = _info;
+    function setInfo(uint index, ColorInfo _color, string memory _info) public onlyWhitelist {
+        emit InfoChange (msg.sender, infos[msg.sender][index].info, _info);
+        infos[msg.sender][index].color = _color;
+        infos[msg.sender][index].info = _info;
     }
     
-    function addInfo(string memory _info) public onlyWhitelist returns (uint index) {
+    function addInfo(ColorInfo _color, string memory _info) public onlyWhitelist returns (uint index) {
         InfoStruct memory infoAux = InfoStruct ({
-            account: msg.sender,
+            color: _color,
             info: _info
         });
-        infos.push(infoAux);
-        index = infos.length - 1;
-    }
-
-    function listInfo() public view returns (InfoStruct[] memory) {
-        return infos;
-    }
+        infos[msg.sender].push(infoAux);
+        index = infos[msg.sender].length - 1;     
+    }    
 
     function addMember (address _member) public onlyOwner {
         whiteList[_member] = true;
