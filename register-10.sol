@@ -26,20 +26,21 @@ contract Register10 {
         return info[index];
     }
 
-    function listAllInfo() public view returns (string[] memory) {
-        return info;
-    }
-
-    function listInfo(uint from, uint to) public view returns (string[] memory) {
-        if (to == 0)
-            to = info.length-1;
-        uint infoCount = to - from + 1;
+    function listInfo(uint start, uint end) public view returns (string[] memory) {
+        if (end == 0 || end > info.length)
+            end = info.length-1;
+        require (start <= end, "start must <= end");
+        uint infoCount = end - start + 1;
         string[] memory infoAux = new string[](infoCount);
 
-        for (uint i = from; i < to; i++) {
-            infoAux[i] = info[i];
+        for (uint i = start; i < (end + 1); i++) {
+            infoAux[i-start] = info[i];
         }
         return infoAux;
+    }
+
+    function listAllInfo() public view returns (string[] memory) {
+        return info;
     }
 
     function addInfo(string memory _info) external onlyOwner returns (uint index) {

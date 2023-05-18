@@ -2,9 +2,7 @@
 pragma solidity 0.8.19;
 // each address has a mapping with array of structs
 
-contract Register14 {
-    address public owner;
-    mapping (address => bool) public whiteList;
+contract Register16 {
     
     //enum ColorInfo {Undefined = 0, Blue = 1, Blue = 2}
     enum ColorInfo {Undefined, Blue, Red}
@@ -12,15 +10,15 @@ contract Register14 {
     struct InfoStruct {
         ColorInfo color;
         string info;
+        uint countChanges;
     }
     mapping (address => InfoStruct[]) public infos;
 
     constructor() {
-        owner = msg.sender;
-        whiteList[msg.sender] = true;
         InfoStruct memory infoAux = InfoStruct ({
             color: ColorInfo.Undefined,
-            info: "Sol"
+            info: "Sol";
+            uint countChanges;
         });        
         infos[msg.sender].push (infoAux);
     }
