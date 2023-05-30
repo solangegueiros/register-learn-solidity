@@ -16,9 +16,9 @@ I suggest to try it in [Remix](http://remix.ethereum.org/)
 - Solidity version: ```pragma``` command
 - Creating a contract: ```contract``` command
 - Variable type: ```string```
-- Variable visibility: ```private``` and ```external```
+- Variable visibility: ```private```
 - Creating a function: ```function```
-- Function visibility: ```public``` and ```external```
+- Function visibility: ```external```
 - Function types: ```view```
 - Function with parameters
 - Returning data in functions
@@ -36,20 +36,24 @@ I suggest to try it in [Remix](http://remix.ethereum.org/)
 - Variable type: ```address```
 - Owner concept
 - Global variable: ```msg.sender```
-
-#### Register-05
 - Checking conditions: ```if```command
 - Permissions and access concepts
 
-#### Register-06
+#### Register-05
 - Managing conditions: ```require``` command
 - Error messages
 
+#### Register-06
+- Function modifiers
+
 #### Register-07
-- Modifiers
+- Events
 
 #### Register-08
-- Events
+- All together 1
+  - types string, uint, address
+  - msg.sender and owner, constructor
+  - require, function modifiers, events
 
 #### Register-09
 - Array
@@ -60,19 +64,19 @@ I suggest to try it in [Remix](http://remix.ethereum.org/)
 
 #### Register-11
 - Key -> value concept: ```mapping``` command
-
-#### Register-12
 - Access control: creating a whitelist using a ```mapping```
 
-#### Register-13
-- Combining ```mapping``` and ```array```
-
-#### Register-14
-- Struct concept
-
-#### Register-15
+#### Register-12
 - Enum concept
 
-#### Register-16
-- Concepts together
-- each address has a mapping with array of structs
+#### Register-13
+- Structs
+
+#### Register-14
+- Combining ```mapping``` and ```struct```
+- One struct per address
+- You can only modify your own struct, no whitelist
+
+#### Register-15
+- Combining ```mapping``` and ```array```
+- Each address has a mapping with array of structs
