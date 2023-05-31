@@ -17,7 +17,7 @@ contract Register10 {
     * Store `myInfo` at the end of the string array
     * @dev Get the position (index) where the string was stored and return it
     * @param myInfo the new string to be stored
-    * @return the index where the string was stored
+    * @return index where the string was stored
     */
     function addInfo(string memory myInfo) external returns (uint index) {
         storedInfos.push(myInfo);
@@ -54,25 +54,26 @@ contract Register10 {
     * @return an string array
     */
     function listAllInfo() external view returns (string[] memory) {
-        return listInfo(0, info.length-1);
+        return listInfo(0, storedInfos.length-1);
     }
 
     /**
     * Return a range of stored strings
     * It is a public function because it can be called inside (from listAllInfo) or outside
     * @dev retrieves the string locate in the index of the array `storedInfos`
-    * @param index is the location in the array to be returned
-    * @return the stored string in the index
+    * @param start is the initial range in the array to be returned
+    * @param end is the final range in the array to be returned
+    * @return infoAux - the stored string in the index
     */
     function listInfo(uint start, uint end) public view returns (string[] memory) {
-        if (end > info.length)
-            end = info.length-1;
+        if (end > storedInfos.length)
+            end = storedInfos.length-1;
         require (start <= end, "start must <= end");
         uint infoCount = end - start + 1;
         string[] memory infoAux = new string[](infoCount);
 
         for (uint i = start; i < (end + 1); i++) {
-            infoAux[i-start] = info[i];
+            infoAux[i-start] = storedInfos[i];
         }
         return infoAux;
     }

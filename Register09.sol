@@ -10,7 +10,7 @@ contract Register09 {
     * Store `myInfo` at the end of the string array
     * @dev Get the position (index) where the string was stored and return it
     * @param myInfo the new string to be stored
-    * @return the index where the string was stored
+    * @return index where the string was stored
     */
     function addInfo(string memory myInfo) external returns (uint index) {
         storedInfos.push(myInfo);

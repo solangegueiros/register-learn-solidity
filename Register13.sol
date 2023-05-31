@@ -6,7 +6,7 @@ pragma solidity 0.8.19;
 contract Register13 {
 
     //enum Colors {Undefined = 0, Blue = 1, Blue = 2}
-    enum public Colors {Undefined, Blue, Red}
+    enum Colors {Undefined, Blue, Red}
 
     struct InfoStruct {
         string info;
@@ -18,7 +18,7 @@ contract Register13 {
     constructor() {
         storedInfo = InfoStruct ({
             info: "Hello world",
-            color: Undefined,
+            color: Colors.Undefined,
             countChanges: 0
         });
     }
@@ -31,7 +31,7 @@ contract Register13 {
     * @param myColor the new color to store
     * @param myInfo the new string to store
     */
-    function setInfo(ColorInfo myColor, string memory myInfo) external {
+    function setInfo(Colors myColor, string memory myInfo) external {
         storedInfo.countChanges++;
         storedInfo.color = myColor;  
         storedInfo.info = myInfo;    
@@ -42,7 +42,7 @@ contract Register13 {
     * @dev return the struct storedInfo
     * @return the stored struct storedInfo
     */
-    function getInfo() external view returns (InfoStruct[] memory) {
+    function getInfo() external view returns (InfoStruct memory) {
         return storedInfo;
     }   
 }

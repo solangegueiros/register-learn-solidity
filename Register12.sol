@@ -8,7 +8,7 @@ pragma solidity 0.8.19;
 contract Register12 {
     
     //enum Colors {Undefined = 0, Blue = 1, Blue = 2}
-    enum public Colors {Undefined, Blue, Red}
+    enum Colors {Undefined, Blue, Red}
     Colors infoColor;
     string storedInfo;
 
@@ -18,7 +18,7 @@ contract Register12 {
     * @param myColor the new color to store
     * @param myInfo the new string to store
     */
-    function setInfo(ColorInfo myColor, string memory myInfo) external {
+    function setInfo(Colors myColor, string memory myInfo) external {
         infoColor = myColor;
         storedInfo = myInfo;
     }
@@ -29,7 +29,7 @@ contract Register12 {
     * @dev and the custom color selected from the enum Colors which is stored in infoColor
     * @return the stored string
     */
-    function getInfo() external view returns (string memory, enum memory) {
+    function getInfo() external view returns (string memory, Colors) {
         return (storedInfo, infoColor);
     }
 

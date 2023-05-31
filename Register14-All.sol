@@ -7,7 +7,7 @@ pragma solidity 0.8.19;
 contract Register14 {
 
     //enum Colors {Undefined = 0, Blue = 1, Blue = 2}
-    enum public Colors {Undefined, Blue, Red}
+    enum Colors {Undefined, Blue, Red}
 
     struct InfoStruct {
         string info;
@@ -16,7 +16,7 @@ contract Register14 {
     }
     mapping (address => InfoStruct) private storedInfos;
 
-    event InfoChange(address person, unit countChanges, string oldInfo, string newInfo);
+    event InfoChange(address person, uint countChanges, string oldInfo, string newInfo);
 
     /**
     * Store `myColor` and `myInfo`
@@ -27,7 +27,7 @@ contract Register14 {
     * @param myColor the new color to be stored
     * @param myInfo the new string to be stored
     */
-    function setInfo(ColorInfo myColor, string memory myInfo) external {
+    function setInfo(Colors myColor, string memory myInfo) external {
       storedInfos[msg.sender].countChanges++;
       emit InfoChange (msg.sender, storedInfos[msg.sender].countChanges, storedInfos[msg.sender].info, myInfo);
       storedInfos[msg.sender].color = myColor;  
@@ -39,7 +39,7 @@ contract Register14 {
     * @dev return the struct storedInfo for the msg.sender
     * @return the stored struct storedInfo
     */
-    function getInfo() external view returns (InfoStruct[] memory) {
+    function getInfo() external view returns (InfoStruct memory) {
         return storedInfos[msg.sender];
     } 
 

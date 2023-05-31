@@ -8,7 +8,7 @@ pragma solidity 0.8.19;
 contract Register15 {
 
     //enum Colors {Undefined = 0, Blue = 1, Blue = 2}
-    enum public Colors {Undefined, Blue, Red}
+    enum Colors {Undefined, Blue, Red}
 
     struct InfoStruct {
         string info;
@@ -18,25 +18,30 @@ contract Register15 {
     mapping (address => InfoStruct[]) public storedInfos;
 
     constructor() {
-        InfoStruct auxInfo = InfoStruct ({
+        InfoStruct memory auxInfo = InfoStruct ({
             info: "Hello world",
-            color: Undefined,
+            color: Colors.Undefined,
             countChanges: 0
         });
         storedInfos[msg.sender].push(auxInfo);
     }
 
-    event InfoChange(address person, unit countChanges, string oldInfo, string newInfo);
+    event InfoChange(address person, uint countChanges, string oldInfo, string newInfo);
 
     /**
     * Store `myColor` and `myInfo` at the end of the struct array
     * @dev Get the position (index) where the struct was stored and return it
     * @param myColor the new color to be stored
     * @param myInfo the new string to be stored
-    * @return the index where the struct was stored
+    * @return index where the struct was stored
     */    
-    function addInfo(ColorInfo myColor, string memory myInfo) public returns (uint index) {
-        storedInfos[msg.sender].push(myInfo, myColor, 0);
+    function addInfo(Colors myColor, string memory myInfo) public returns (uint index) {
+        InfoStruct memory auxInfo = InfoStruct ({
+            info: myInfo,
+            color: myColor,
+            countChanges: 0
+        });
+        storedInfos[msg.sender].push(auxInfo);
         index = storedInfos[msg.sender].length -1;
     }
     
@@ -47,7 +52,8 @@ contract Register15 {
     * @param newInfo is the new string to be stored
     */
     function setInfo(uint index, string memory newInfo) public {
-        emit InfoChange (msg.sender, infos[msg.sender][index], newInfo);
+        storedInfos[msg.sender][index].countChanges++;
+        emit InfoChange (msg.sender, storedInfos[msg.sender][index].countChanges, storedInfos[msg.sender][index].info, newInfo);
         storedInfos[msg.sender][index].info = newInfo;
         storedInfos[msg.sender][index].countChanges++;
     }
@@ -58,7 +64,7 @@ contract Register15 {
     * @param index is the position where the struct will be updated
     * @param myColor is the new color to be stored
     */
-    function setColor(uint index, ColorInfo myColor) public {
+    function setColor(uint index, Colors myColor) public {
         storedInfos[msg.sender][index].color = myColor;
         storedInfos[msg.sender][index].countChanges++;
     }
@@ -92,7 +98,7 @@ contract Register15 {
     * @return an struct array
     */
     function listAllInfo(address account) external view returns (InfoStruct[] memory) {
-        return storedInfos[msg.account];
+        return storedInfos[account];
     }
    
 }
